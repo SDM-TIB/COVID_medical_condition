@@ -41,3 +41,26 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
     #set_DDIs['Effect'] = set_DDIs['Effect'].str.replace('http://covid-19.tib.eu/Effect/', '')
     
     return set_DDIs
+
+
+def get_drug_label(endpoint, cov_drug):
+    sparql = SPARQLWrapper(endpoint)
+    input_db_uri = ['<http://covid-19.tib.eu/vocab/'+db+'> .' for db in cov_drug]
+    
+    drugLabel = []
+    for d in input_db_uri:
+        query = """select distinct ?drugLabel
+                     where {
+                           ?Drug1CUI  ?p """+ d +"""
+                           ?Drug1CUI <http://covid-19.tib.eu/vocab/drugLabel> ?drugLabel .
+                    }"""
+        sparql.setQuery(query)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+
+        
+        for r in results['results']['bindings']:
+            drugLabel.append(r['drugLabel']['value'])
+    
+    return drugLabel
+	
