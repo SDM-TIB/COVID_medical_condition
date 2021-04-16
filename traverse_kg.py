@@ -2,8 +2,9 @@ import pandas as pd
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 
-def get_ddi(endpoint, list_drug):
+def get_ddi(endpoint, comorb_drug, cov_drug):
     sparql = SPARQLWrapper(endpoint)
+	list_drug = comorb_drug + cov_drug
     input_db_uri = ','.join(['<http://covid-19.tib.eu/vocab/'+db+'>' for db in list_drug])
     
     query = """select distinct ?drugLabel1 ?drugLabel2 ?effectLabel
