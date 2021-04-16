@@ -31,11 +31,11 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
     sparql.setReturnFormat(JSON)
     results = sparql.query().convert()
 
-    dd = {'drugLabel1':[], 'drugLabel2':[], 'effectLabel':[]}
+    dd = {'EffectorDrugLabel':[], 'AffectedDrugLabel':[], 'effect_impact':[]}
     for r in results['results']['bindings']:
-        dd['drugLabel1'].append(r['drugLabel1']['value'])
-        dd['drugLabel2'].append(r['drugLabel2']['value'])
-        dd['effectLabel'].append(r['effectLabel']['value'])
+        dd['EffectorDrugLabel'].append(r['drugLabel1']['value'])
+        dd['AffectedDrugLabel'].append(r['drugLabel2']['value'])
+        dd['effect_impact'].append(r['effectLabel']['value'])
 
     set_DDIs = pd.DataFrame(dd)
     #set_DDIs['Effect'] = set_DDIs['Effect'].str.replace('http://covid-19.tib.eu/Effect/', '')
