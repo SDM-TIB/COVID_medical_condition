@@ -4,9 +4,9 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 
 def get_ddi(endpoint, comorb_drug, cov_drug):
     sparql = SPARQLWrapper(endpoint)
-	list_drug = comorb_drug + cov_drug
+    list_drug = comorb_drug + cov_drug
     input_db_uri = ','.join(['<http://covid-19.tib.eu/vocab/'+db+'>' for db in list_drug])
-    
+
     query = """select distinct ?drugLabel1 ?drugLabel2 ?effectLabel
                 WHERE {
                 ?DrugDrugInteraction a <http://covid-19.tib.eu/vocab/DrugDrugInteraction>.
@@ -32,7 +32,6 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
     results = sparql.query().convert()
 
     dd = {'drugLabel1':[], 'drugLabel2':[], 'effectLabel':[]}
-
     for r in results['results']['bindings']:
         dd['drugLabel1'].append(r['drugLabel1']['value'])
         dd['drugLabel2'].append(r['drugLabel2']['value'])
