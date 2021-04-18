@@ -3,7 +3,7 @@ import networkx as nx
 from networkx.algorithms import bipartite
 import matplotlib
 
-matplotlib.use('TkAgg')
+#matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 from itertools import chain, combinations
