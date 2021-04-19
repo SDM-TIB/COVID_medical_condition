@@ -33,12 +33,12 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
 
     dd = {'precipitant_label':[], 'object_label':[], 'effect_label':[], 'impact':[]}
     for r in results['results']['bindings']:
-        dd['precipitant_label'].append(r['precipitant_label']['value'])
-        dd['object_label'].append(r['object_label']['value'])
-        dd['effect_label'].append(r['effect_label']['value'])
+		dd['precipitant_label'].append(r['precipitant_label']['value'])
+		dd['object_label'].append(r['object_label']['value'])
+		dd['effect_label'].append(r['effect_label']['value'])
 		dd['impact'].append(r['impact']['value'])
 
-    set_DDIs = pd.DataFrame(dd)
+	set_DDIs = pd.DataFrame(dd)
 	set_DDIs['effect_impact'] = set_DDIs[['effect_label', 'impact']].apply(lambda x: '_'.join(x), axis=1)
     
     return set_DDIs
