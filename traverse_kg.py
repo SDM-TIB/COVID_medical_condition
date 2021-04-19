@@ -40,9 +40,9 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
 
     set_DDIs = pd.DataFrame(dd)
     set_DDIs['effect_impact'] = set_DDIs[['effect_label', 'impact']].apply(lambda x: '_'.join(x), axis=1)
+    set_DDIs = set_DDIs[['precipitant_label', 'object_label', 'effect_impact']]
     
     return set_DDIs
-
 
 def get_drug_label(endpoint, cov_drug):
     sparql = SPARQLWrapper(endpoint)
@@ -52,8 +52,8 @@ def get_drug_label(endpoint, cov_drug):
     for d in input_db_uri:
         query = """select distinct ?drugLabel
                      where {
-							"""+ d +""" <http://covid-19.tib.eu/vocab/hasCUIAnnotation> ?drug_cui.
-							?drug_cui <http://covid-19.tib.eu/vocab/annlabel> ?drugLabel.
+                        """+ d +""" <http://covid-19.tib.eu/vocab/hasCUIAnnotation> ?drug_cui.
+                        ?drug_cui <http://covid-19.tib.eu/vocab/annlabel> ?drugLabel.
                     }"""
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
@@ -64,4 +64,3 @@ def get_drug_label(endpoint, cov_drug):
             drugLabel.append(r['drugLabel']['value'])
     
     return drugLabel
-	
