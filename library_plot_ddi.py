@@ -9,15 +9,6 @@ import matplotlib.colors as colors
 from itertools import chain, combinations
 
 
-# # Combine column 'Adverse_Event' and 'Impact'
-def combine_col(set_DDIs):
-    set_DDIs['effect_impact'] = set_DDIs[['Effect', 'Impact']].apply(lambda x: '_'.join(x), axis=1)
-    set_DDIs = set_DDIs[['EffectorDrugLabel', 'AffectedDrugLabel', 'effect_impact']]
-    set_DDIs.drop_duplicates(keep='first', inplace=True)
-    set_DDIs.reset_index(inplace=True)
-    set_DDIs = set_DDIs.drop(columns=['index'])
-    return set_DDIs
-
 
 # # Add color to edges
 def add_color(set_DDIs):
