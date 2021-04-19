@@ -7,7 +7,7 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
     list_drug = comorb_drug + cov_drug
     input_db_uri = ','.join(['<http://covid-19.tib.eu/Drug/'+db+'>' for db in list_drug])
 
-    query = """select distinct ?precipitant_label ?object_label ?effect_label ?impact
+    query = """select distinct ?precipitant_label ?object_label ?effect_label ?impact ?precipitant_db ?object_db
                         where {
 
                         ?DrugDrugInteraction a <http://covid-19.tib.eu/vocab/DrugDrugInteraction>.        
@@ -31,18 +31,27 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
     sparql.setReturnFormat(JSON)
     results = sparql.query().convert()
 
-    dd = {'precipitant_label':[], 'object_label':[], 'effect_label':[], 'impact':[]}
+    dd = {'precipitant_label':[], 'object_label':[], 'effect_label':[], 'impact':[], 'precipitant_db':[], 'object_db':[]}
     for r in results['results']['bindings']:
         dd['precipitant_label'].append(r['precipitant_label']['value'])
         dd['object_label'].append(r['object_label']['value'])
         dd['effect_label'].append(r['effect_label']['value'])
         dd['impact'].append(r['impact']['value'])
+        dd['precipitant_db'].append(r['precipitant_db']['value'])
+        dd['object_db'].append(r['object_db']['value'])
 
     set_DDIs = pd.DataFrame(dd)
+    
+    cov_drug_uri = ['http://covid-19.tib.eu/Drug/'+db+'' for db in cov_drug]
+    a = set(set_DDIs.precipitant_db.unique())
+    a.update(list(set_DDIs.object_db.unique()))
+    b = a.intersection(set(cov_drug_uri))
+    cov_ddi = [w.replace('http://covid-19.tib.eu/Drug/', '') for w in b]
+    
     set_DDIs['effect_impact'] = set_DDIs[['effect_label', 'impact']].apply(lambda x: '_'.join(x), axis=1)
     set_DDIs = set_DDIs[['precipitant_label', 'object_label', 'effect_impact']]
     
-    return set_DDIs
+    return set_DDIs, cov_ddi
 
 def get_drug_label(endpoint, cov_drug):
     sparql = SPARQLWrapper(endpoint)
