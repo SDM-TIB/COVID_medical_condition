@@ -8,9 +8,9 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
     input_db_uri = ','.join(['<http://covid-19.tib.eu/Drug/'+db+'>' for db in list_drug])
 
     query = """select distinct ?precipitant_label ?object_label ?effect_label ?impact
-				where {
+                        where {
 
-						?DrugDrugInteraction a <http://covid-19.tib.eu/vocab/DrugDrugInteraction>.        
+                        ?DrugDrugInteraction a <http://covid-19.tib.eu/vocab/DrugDrugInteraction>.        
                         ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/precipitant_hasDrugBankID> ?precipitant_db.
                         ?precipitant_db <http://covid-19.tib.eu/vocab/hasCUIAnnotation> ?precipitant_cui.
                         ?precipitant_cui <http://covid-19.tib.eu/vocab/annlabel> ?precipitant_label.
@@ -21,9 +21,9 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
                         ?effect <http://covid-19.tib.eu/vocab/annlabel> ?effect_label .
                         ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/impact> ?impact.
 
-						FILTER (?precipitant_label != ?object_label)
-						FILTER (?precipitant_db in (""" + input_db_uri + """))
-						FILTER (?object_db in (""" + input_db_uri + """))
+                        FILTER (?precipitant_label != ?object_label)
+                        FILTER (?precipitant_db in (""" + input_db_uri + """))
+                        FILTER (?object_db in (""" + input_db_uri + """))
                        
                         }"""
 
@@ -33,13 +33,13 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
 
     dd = {'precipitant_label':[], 'object_label':[], 'effect_label':[], 'impact':[]}
     for r in results['results']['bindings']:
-		dd['precipitant_label'].append(r['precipitant_label']['value'])
-		dd['object_label'].append(r['object_label']['value'])
-		dd['effect_label'].append(r['effect_label']['value'])
-		dd['impact'].append(r['impact']['value'])
+        dd['precipitant_label'].append(r['precipitant_label']['value'])
+        dd['object_label'].append(r['object_label']['value'])
+        dd['effect_label'].append(r['effect_label']['value'])
+        dd['impact'].append(r['impact']['value'])
 
-	set_DDIs = pd.DataFrame(dd)
-	set_DDIs['effect_impact'] = set_DDIs[['effect_label', 'impact']].apply(lambda x: '_'.join(x), axis=1)
+    set_DDIs = pd.DataFrame(dd)
+    set_DDIs['effect_impact'] = set_DDIs[['effect_label', 'impact']].apply(lambda x: '_'.join(x), axis=1)
     
     return set_DDIs
 
