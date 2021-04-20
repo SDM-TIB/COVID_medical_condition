@@ -49,7 +49,10 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
     cov_ddi = [w.replace('http://covid-19.tib.eu/Drug/', '') for w in b]
     
     set_DDIs['effect_label'] = set_DDIs['effect_label'].str.replace('corrected_prolonged_qt_interval_by_ecg_finding', 'prolonged_qt')
-    
+    set_DDIs.drop(set_DDIs[set_DDIs.precipitant_label=='injection,_azithromycin,_500_mg_administered'].index, inplace=True)
+    set_DDIs.drop(set_DDIs[set_DDIs.object_label=='injection,_azithromycin,_500_mg_administered'].index, inplace=True)
+
+
     set_DDIs['effect_impact'] = set_DDIs[['effect_label', 'impact']].apply(lambda x: '_'.join(x), axis=1)
     set_DDIs = set_DDIs[['precipitant_label', 'object_label', 'effect_impact']]
     
