@@ -48,6 +48,8 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
     b = a.intersection(set(cov_drug_uri))
     cov_ddi = [w.replace('http://covid-19.tib.eu/Drug/', '') for w in b]
     
+    set_DDIs['effect_label'] = set_DDIs['effect_label'].str.replace('corrected_prolonged_qt_interval_by_ecg_finding', 'prolonged_qt')
+    
     set_DDIs['effect_impact'] = set_DDIs[['effect_label', 'impact']].apply(lambda x: '_'.join(x), axis=1)
     set_DDIs = set_DDIs[['precipitant_label', 'object_label', 'effect_impact']]
     
