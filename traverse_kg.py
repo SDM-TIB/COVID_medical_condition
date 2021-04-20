@@ -13,12 +13,12 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
                         ?DrugDrugInteraction a <http://covid-19.tib.eu/vocab/DrugDrugInteraction>.        
                         ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/precipitant_hasDrugBankID> ?precipitant_db.
                         ?precipitant_db <http://covid-19.tib.eu/vocab/hasCUIAnnotation> ?precipitant_cui.
-                        ?precipitant_cui <http://covid-19.tib.eu/vocab/annlabel> ?precipitant_label.
+                        ?precipitant_cui <http://covid-19.tib.eu/vocab/annLabel> ?precipitant_label.
                         ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/object_hasDrugBankID> ?object_db.
                         ?object_db <http://covid-19.tib.eu/vocab/hasCUIAnnotation> ?object_cui.
-                        ?object_cui <http://covid-19.tib.eu/vocab/annlabel> ?object_label.
+                        ?object_cui <http://covid-19.tib.eu/vocab/annLabel> ?object_label.
                         ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/effect> ?effect.
-                        ?effect <http://covid-19.tib.eu/vocab/annlabel> ?effect_label .
+                        ?effect <http://covid-19.tib.eu/vocab/annLabel> ?effect_label .
                         ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/impact> ?impact.
 
                         FILTER (?precipitant_label != ?object_label)
