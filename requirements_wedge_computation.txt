@@ -1,0 +1,6 @@
+pandas
+SPARQLWrapper
+pyDatalog
+networkx
+ipycytoscape
+ipywidgets
