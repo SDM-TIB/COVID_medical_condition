@@ -543,4 +543,4 @@ def create_graph_cytoscape(middle_vertex):
 
     cytoscapeobj.set_style(s)
     cytoscapeobj.set_layout(name='breadthfirst', animate=True)  # concentric,  breadthfirst
-    display(cytoscapeobj)
+    return cytoscapeobj
