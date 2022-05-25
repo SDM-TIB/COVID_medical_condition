@@ -1,25 +1,27 @@
 import pandas as pd
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-
 def get_ddi(endpoint, comorb_drug, cov_drug):
     sparql = SPARQLWrapper(endpoint)
     list_drug = comorb_drug + cov_drug
-    input_db_uri = ','.join(['<http://covid-19.tib.eu/Drug/'+db+'>' for db in list_drug])
+    input_db_uri = ','.join(['<http://research.tib.eu/covid-19/entity/'+db+'>' for db in list_drug])
 
-    query = """select distinct ?precipitant_label ?object_label ?effect_label ?impact ?precipitant_db ?object_db
+    
+    query = """
+    prefix covid-19: <http://research.tib.eu/covid-19/vocab/>
+    select distinct ?precipitant_label ?object_label ?effect_label ?impact ?precipitant_db ?object_db
                         where {
 
-                        ?DrugDrugInteraction a <http://covid-19.tib.eu/vocab/DrugDrugInteraction>.        
-                        ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/precipitant_hasDrugBankID> ?precipitant_db.
-                        ?precipitant_db <http://covid-19.tib.eu/vocab/hasCUIAnnotation> ?precipitant_cui.
-                        ?precipitant_cui <http://covid-19.tib.eu/vocab/annLabel> ?precipitant_label.
-                        ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/object_hasDrugBankID> ?object_db.
-                        ?object_db <http://covid-19.tib.eu/vocab/hasCUIAnnotation> ?object_cui.
-                        ?object_cui <http://covid-19.tib.eu/vocab/annLabel> ?object_label.
-                        ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/effect> ?effect.
-                        ?effect <http://covid-19.tib.eu/vocab/annLabel> ?effect_label .
-                        ?DrugDrugInteraction <http://covid-19.tib.eu/vocab/impact> ?impact.
+                        ?DrugDrugInteraction a covid-19:DrugDrugInteraction.        
+                        ?DrugDrugInteraction covid-19:precipitant_hasDrugBankID ?precipitant_db.
+                        ?precipitant_db covid-19:hasCUIAnnotation ?precipitant_cui.
+                        ?precipitant_cui covid-19:annLabel ?precipitant_label.
+                        ?DrugDrugInteraction covid-19:object_hasDrugBankID ?object_db.
+                        ?object_db covid-19:hasCUIAnnotation ?object_cui.
+                        ?object_cui covid-19:annLabel ?object_label.
+                        ?DrugDrugInteraction covid-19:effect ?effect.
+                        ?effect covid-19:annLabel ?effect_label .
+                        ?DrugDrugInteraction covid-19:impact ?impact.
 
                         FILTER (?precipitant_label != ?object_label)
                         FILTER (?precipitant_db in (""" + input_db_uri + """))
@@ -42,11 +44,11 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
 
     set_DDIs = pd.DataFrame(dd)
     
-    cov_drug_uri = ['http://covid-19.tib.eu/Drug/'+db+'' for db in cov_drug]
+    cov_drug_uri = ['http://research.tib.eu/covid-19/entity/'+db+'' for db in cov_drug]
     a = set(set_DDIs.precipitant_db.unique())
     a.update(list(set_DDIs.object_db.unique()))
     b = a.intersection(set(cov_drug_uri))
-    cov_ddi = [w.replace('http://covid-19.tib.eu/Drug/', '') for w in b]
+    cov_ddi = [w.replace('http://research.tib.eu/covid-19/entity/', '') for w in b]
     
     set_DDIs['effect_label'] = set_DDIs['effect_label'].str.replace('corrected_prolonged_qt_interval_by_ecg_finding', 'prolonged_qt')
     set_DDIs.drop(set_DDIs[set_DDIs.precipitant_label=='injection,_azithromycin,_500_mg_administered'].index, inplace=True)
@@ -60,14 +62,16 @@ def get_ddi(endpoint, comorb_drug, cov_drug):
 
 def get_drug_label(endpoint, cov_drug):
     sparql = SPARQLWrapper(endpoint)
-    input_db_uri = ['<http://covid-19.tib.eu/Drug/'+db+'> ' for db in cov_drug]
+    input_db_uri = ['<http://research.tib.eu/covid-19/entity/'+db+'> ' for db in cov_drug]
     
     drugLabel = []
     for d in input_db_uri:
-        query = """select distinct ?drugLabel
+        query = """
+        prefix covid-19: <http://research.tib.eu/covid-19/vocab/>
+        select distinct ?drugLabel
                      where {
-                        """+ d +""" <http://covid-19.tib.eu/vocab/hasCUIAnnotation> ?drug_cui.
-                        ?drug_cui <http://covid-19.tib.eu/vocab/annlabel> ?drugLabel.
+                        """+ d +""" covid-19:hasCUIAnnotation ?drug_cui.
+                        ?drug_cui covid-19:annlabel ?drugLabel.
                     }"""
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
