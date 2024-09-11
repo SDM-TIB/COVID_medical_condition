@@ -176,7 +176,7 @@ def run_plot_graph(g, n_color, ColorLegend, d2_size, edge_colors, multiple_edge,
     
     for label in ColorLegend:
         ax.plot([0],[0], color=ColorLegend[label], label=label)#, marker='o'
-    plt.legend(loc='upper left', fontsize=10, ncol=3).get_frame().set_alpha(0.0)#upper center bbox_to_anchor=(0.5, 1.08)
+    plt.legend(loc='upper left', fontsize=10, ncol=3, bbox_to_anchor=(0.5, 1.0)).get_frame().set_alpha(0.0)#upper center bbox_to_anchor=(0.5, 1.08)
     plt.tight_layout()
     
     use_case = use_case.replace('\n','_')
