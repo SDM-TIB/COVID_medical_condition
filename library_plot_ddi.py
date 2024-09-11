@@ -86,7 +86,7 @@ def get_node_size(g):
 # # Color nodes
 def get_node_color(g, label_dsd, color_mark, color_basic):
     list_node = list(g.nodes)
-    print('check:', list_node)
+    # print('check:', list_node)
     n_color = [color_basic] * g.number_of_nodes()
     for d in label_dsd:
         index = list_node.index(d)
@@ -158,7 +158,7 @@ def run_plot_graph(g, n_color, ColorLegend, d2_size, edge_colors, multiple_edge,
     plt.figure(figsize=dim)#figsize=(16, 8)
     ax = plt.subplot(1,1,1)
     
-    pos = nx.circular_layout(g, center=(1.06,0.0), scale=1)# scale=1
+    pos = nx.circular_layout(g, center=(1.1,0.0), scale=1)# scale=1
     nx.draw_networkx_nodes(g, pos=pos, node_color=n_color, node_size=d2_size)
 
     i=0
@@ -176,11 +176,14 @@ def run_plot_graph(g, n_color, ColorLegend, d2_size, edge_colors, multiple_edge,
     
     for label in ColorLegend:
         ax.plot([0],[0], color=ColorLegend[label], label=label)#, marker='o'
-    plt.legend(loc='upper left', fontsize=10, ncol=3, bbox_to_anchor=(0.0, 1.01)).get_frame().set_alpha(0.0)#upper center bbox_to_anchor=(0.5, 1.08)
+    plt.legend(loc='upper left', fontsize=10, ncol=3, bbox_to_anchor=(0.0, 1.1)).get_frame().set_alpha(0.0)#upper center bbox_to_anchor=(0.5, 1.08)
+
+    # Expanding the x-axis to avoid cutting off the rightmost labels
+    ax.set_xlim(ax.get_xlim()[0], ax.get_xlim()[1] * 1.2)
     plt.tight_layout()
     
-    use_case = use_case.replace('\n','_')
-    plt.savefig(use_case+'.pdf')
+    # use_case = use_case.replace('\n','_')
+    # plt.savefig(use_case+'.pdf')
     #plt.show()
     
 
@@ -199,15 +202,13 @@ def preprocess(union_plot, set_dsd_label):
     d2_size = get_node_size(g)
     
     return g, n_color, ColorLegend, d2_size, set_dsd_label, edge_colors, multiple_edge
-    
-    
+
     
 def plot_bipartite(union_plot, set_dsd_label, plot_name):
     g, n_color, ColorLegend, d2_size, set_dsd_label, edge_colors, multiple_edge = preprocess(union_plot, set_dsd_label)
     bottom_nodes, top_nodes = plot_bipartite_graph(g, n_color, ColorLegend, d2_size, set_dsd_label, edge_colors,
                                                    multiple_edge, plot_name, (6, 5))  # (8,6)
-    
-    
+
     
 def plot_graph(union_plot, set_dsd_label, plot_name):
     g, n_color, ColorLegend, d2_size, set_dsd_label, edge_colors, multiple_edge = preprocess(union_plot, set_dsd_label)
