@@ -102,5 +102,4 @@ def get_drug_label(endpoint, cov_drug):
 
         for r in results['results']['bindings']:
             drugLabel.append(r['drugLabel']['value'].lower())
-    print(drugLabel)
     return drugLabel
