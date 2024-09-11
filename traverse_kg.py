@@ -94,8 +94,9 @@ def get_drug_label(endpoint, cov_drug):
         select distinct ?drugLabel
                      where {
                         """+ d +""" covid-19:hasCUIAnnotation ?drug_cui.
-                        ?drug_cui covid-19:annlabel ?drugLabel.
+                        ?drug_cui covid-19:annLabel ?drugLabel.
                     }"""
+
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
