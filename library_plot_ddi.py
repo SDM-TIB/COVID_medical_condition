@@ -30,10 +30,11 @@ def add_color(set_DDIs):
     color.pop(index)
     # --------------remove colors-------------
 
-    effect_impact = list(pd.value_counts(set_DDIs.effect_impact).index)
-
+    effect_impact = list(set_DDIs['effect_impact'].value_counts().index)
+    set_DDIs['edge_color'] = ''
+    set_DDIs['edge_color'] = set_DDIs['edge_color'].astype(str)
     for i in range(len(effect_impact)):
-        set_DDIs.loc[set_DDIs.effect_impact == effect_impact[i], "edge_color"] = color[i + 8]
+        set_DDIs.loc[set_DDIs['effect_impact'] == effect_impact[i], 'edge_color'] = color[i + 8]
         ColorLegend[effect_impact[i]] = color[i + 8]
 
     set_DDIs.reset_index(inplace=True)
