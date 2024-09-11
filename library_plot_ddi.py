@@ -211,6 +211,6 @@ def plot_bipartite(union_plot, set_dsd_label, plot_name):
     
 def plot_graph(union_plot, set_dsd_label, plot_name):
     g, n_color, ColorLegend, d2_size, set_dsd_label, edge_colors, multiple_edge = preprocess(union_plot, set_dsd_label)
-    run_plot_graph(g, n_color, ColorLegend, d2_size, edge_colors, multiple_edge, plot_name, (9, 3)) #(12, 6)
+    run_plot_graph(g, n_color, ColorLegend, d2_size, edge_colors, multiple_edge, plot_name, (8, 5)) #(12, 6)
     
     
