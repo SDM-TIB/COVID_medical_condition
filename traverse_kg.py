@@ -96,7 +96,7 @@ def get_drug_label(endpoint, cov_drug):
                         """+ d +""" covid-19:hasCUIAnnotation ?drug_cui.
                         ?drug_cui covid-19:annLabel ?drugLabel.
                     }"""
-
+        print(query)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
